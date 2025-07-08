@@ -25,21 +25,22 @@ function Header() {
     const res = await fetch("/logout", {
       method: "GET",
       headers: {
-        "content-Type": "application/json",
+        "Content-Type": "application/json",
         Authorization: token,
         Accept: "application/json",
       },
       credentials: "include",
     });
     const data = await res.json();
+    console.log(data);
 
-    if (data.status !== 201) {
-      console.log("error");
-    } else {
+    if (data.status === 201) {
       console.log("user logout");
       localStorage.removeItem("usersdatatoken");
+      setloginData(false);
       history("/");
-      setloginData(false); // Make sure to update context here
+    } else {
+      console.log("error");
     }
   };
 
@@ -67,7 +68,7 @@ function Header() {
                   fontWeight: "bold",
                   textTransform: "capitalize",
                 }}
-                onClick={handleClick} // Corrected from handleClose to handleClick
+                onClick={handleClick}
               >
                 {logindata.validuserOne.fname
                   ? logindata.validuserOne.fname[0].toUpperCase()

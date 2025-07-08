@@ -1,9 +1,12 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "./ContextProvider/Context";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 function Dashboard() {
-  const { logindata, setLoginData } = useContext(LoginContext);
+  const { logindata, setloginData } = useContext(LoginContext);
+  const [data, setData] = useState(false);
   const history = useNavigate();
 
   console.log(logindata?.validuserOne?.email);
@@ -24,15 +27,18 @@ function Dashboard() {
     } else {
       console.log("user verify");
       history("/dash");
-      setLoginData(data); // Make sure to update context here
+      setloginData(data); // Make sure to update context here
     }
   };
 
   useEffect(() => {
-    DashboardValid();
+    setTimeout(() => {
+      DashboardValid();
+      setData(true);
+    }, 2000);
   }, []);
 
-  return (
+  return data ? (
     <div
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
@@ -43,6 +49,18 @@ function Dashboard() {
       />
       <h1>User Email: {logindata ? logindata.validuserOne?.email : ""}</h1>
     </div>
+  ) : (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+      Loading...&nbsp;
+      <CircularProgress />
+    </Box>
   );
 }
 
